@@ -47,23 +47,22 @@ Now, let's say that we want to add a column to either our `Users` or `Tasks` tab
 First lets create that migration script through `knex.js`
 
 ```bash
-$ knex migrate:make add_fullname_to_users
+$ knex migrate:make users
 ```
 
 Inside of our newly created migration script, we can now edit the `exports.up` and `exports.down` functions to look like this.
 
 ```javascript
-exports.up = function (knex, Promise) {
-  knex.schema.table("users", function (table) {
-    table.integer("fullname").notNull();
-  });
-};
+exports.up = function (knex) {
+  return knex.schema.alterTable('users', function (table) {
+    table.string('username', 35).notNullable().unique()
+  })
+}
 
-exports.down = function (knex, Promise) {
-  knex.schema.table("users", function (table) {
-    table.dropColumn("fullname");
-  });
-};
+exports.down = function (knex) {
+  return knex.dropTable('users')
+}
+
 ```
 
 Now we can run the `knex:migrate` command to update our existing table.
@@ -81,73 +80,21 @@ Similar to migrations, the `knex` module allows us to create scripts to insert i
 Lets create some seed files in this order:
 
 ```bash
-$ knex seed:make 01_users
-$ knex seed:make 02_tasks
+$ knex seed:make users
 ```
 
 Now lets insert some data into our seed scripts:
 
-**Example 01_users.js**
+**Example users.js**
 
 ```javascript
-exports.seed = function(knex, Promise) {
-  // Deletes ALL existing entries
-  return knex('users').del()
-  .then(function () {
-    // Inserts seed entries
-    return knex('users').insert([
-      {
-        id: 1,
-        email: 'nigel@email.com',
-        password: 'dorwssap'
-      },
-      {
-        id: 2,
-        email: 'nakaz@email.com',
-        password: 'password1'
-      },
-      {
-        id: 3
-        email: 'jaywon@email.com',
-        password: 'password123'
-      }
-    ]);
-  });
-};
-
-```
-
-**Example `02_tasks.js`**
-
-```javascript
-exports.seed = function (knex, Promise) {
-  // Deletes ALL existing entries
-  return knex("tasks")
-    .del()
-    .then(function () {
-      // Inserts seed entries
-      return knex("tasks").insert([
-        {
-          title: "Vaccuum the floors",
-          description: "Vaccum the living room and all bedroom",
-          is_complete: false,
-          user_id: 2,
-        },
-        {
-          title: "Clean the car",
-          description: "Wash, wax and vacuum the car",
-          is_complete: false,
-          user_id: 1,
-        },
-        {
-          title: "Buy groceries",
-          description: "Milk, bread, cheese, eggs, flour",
-          is_complete: true,
-          user_id: 3,
-        },
-      ]);
-    });
-};
+exports.seed = async function (knex) {
+  return knex('users').insert([
+    { username: 'test-user1' },
+    { username: 'test-user2' },
+    { username: 'test-user3' }
+  ])
+}
 ```
 
 Now we can run the below command in the root of our project to seed our database!
