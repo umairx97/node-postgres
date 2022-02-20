@@ -11,7 +11,7 @@ To learn more about migrations, check out [this](https://www.openscg.com/2017/08
 Let's create a `Users` table using the `knex` command line tool. In the root of our project run the following commands:
 
 ```bash
-$ knex migrate:make users
+$ knex seed:make users --knexfile=./db/knexfile.js
 ```
 
 The above commands will generate migration scripts in `./db/migrations` with the given name plus a timestamp. (i.e. 20171024191043_user.js). This is on purpose so that knex can run the older migration files first, and then the newer ones that build on top of them.
@@ -47,7 +47,7 @@ Now, let's say that we want to add a column to either our `Users` or `Tasks` tab
 First lets create that migration script through `knex.js`
 
 ```bash
-$ knex migrate:make users
+$ knex seed:make users --knexfile=./db/knexfile.js
 ```
 
 Inside of our newly created migration script, we can now edit the `exports.up` and `exports.down` functions to look like this.
@@ -68,7 +68,7 @@ exports.down = function (knex) {
 Now we can run the `knex:migrate` command to update our existing table.
 
 ```bash
-$ knex migrate:latest
+$ knex migrate:latest --knexfile=./db/knexfile.js
 ```
 
 And voila! We should now have a new column named `fullname` in our `Users` table.
@@ -80,7 +80,7 @@ Similar to migrations, the `knex` module allows us to create scripts to insert i
 Lets create some seed files in this order:
 
 ```bash
-$ knex seed:make users
+$ knex seed:make users --knexfile=./db/knexfile.js
 ```
 
 Now lets insert some data into our seed scripts:
@@ -100,7 +100,7 @@ exports.seed = async function (knex) {
 Now we can run the below command in the root of our project to seed our database!
 
 ```bash
-$ knex seed:run
+$ knex seed:run --knexfile=./db/knexfile.js
 ```
 
 After running this command you should see some test records in your database which you can use either for writing unit tests or in development.
