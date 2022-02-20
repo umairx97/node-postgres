@@ -102,3 +102,5 @@ Now we can run the below command in the root of our project to seed our database
 ```bash
 $ knex seed:run
 ```
+
+After running this command you should see some test records in your database which you can use either for writing unit tests or in development.
