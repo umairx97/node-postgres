@@ -11,7 +11,7 @@ To learn more about migrations, check out [this](https://www.openscg.com/2017/08
 Let's create a `Users` table using the `knex` command line tool. In the root of our project run the following commands:
 
 ```bash
-$ knex migrations:make users --knexfile=./db/knexfile.js
+$ knex migrate:make users --knexfile=./db/knexfile.js
 ```
 
 The above commands will generate migration scripts in `./db/migrations` with the given name plus a timestamp. (i.e. 20171024191043_user.js). This is on purpose so that knex can run the older migration files first, and then the newer ones that build on top of them.
